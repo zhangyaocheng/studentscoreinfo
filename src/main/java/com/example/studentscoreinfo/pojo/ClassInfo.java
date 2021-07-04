@@ -8,7 +8,8 @@ import lombok.Data;
 @Data
 public class ClassInfo {
 
-    private Integer gradeid; // 关联的班级信息
+    private Integer id;
+    private Integer gradeid; // 关联的年级信息
     private String sclass; // 班级信息
     private String remark; // 备注信息
     private int isDelete;

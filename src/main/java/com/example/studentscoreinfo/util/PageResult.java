@@ -5,7 +5,6 @@ import java.util.List;
 
 /**
  * 分页返回结果
- * 01397466
  */
 public class PageResult<T> implements Serializable {
 

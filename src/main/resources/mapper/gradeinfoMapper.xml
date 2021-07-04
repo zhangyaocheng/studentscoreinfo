@@ -16,7 +16,7 @@
         </select>
 
         <select id="listAllGrades" resultType="GradeInfo">
-            select * from gradeinfo
+            select * from gradeinfo where isDelete=0
         </select>
 
         <select id="findGradeInfoByParameters" parameterType="Map" resultType="GradeInfo">

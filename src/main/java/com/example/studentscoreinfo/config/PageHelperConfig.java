@@ -9,7 +9,6 @@ import java.util.Properties;
 
 /**
  * 分页插件配置
- * 01397466
  */
 @Configuration
 public class PageHelperConfig {
