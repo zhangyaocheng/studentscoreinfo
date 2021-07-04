@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.example.studentscoreinfo.mapper.GradeinfoMapper">
+
+        <insert id="addGrade" parameterType="GradeInfo">
+            insert into gradeinfo (sgrade, remark, isDelete) value (#{sgrade}, #{remark}, #{isDelete})
+        </insert>
+
+        <select id="findGradeInfoByGrade" parameterType="GradeInfo" resultType="GradeInfo">
+            select * from gradeinfo where sgrade = #{sgrade}
+        </select>
+
+        <select id="findGradeInfoById" parameterType="GradeInfo" resultType="GradeInfo">
+            select * from gradeinfo where id=#{id}
+        </select>
+
+        <select id="listAllGrades" resultType="GradeInfo">
+            select * from gradeinfo
+        </select>
+
+        <select id="findGradeInfoByParameters" parameterType="Map" resultType="GradeInfo">
+            select * from gradeinfo
+            <where>
+                <if test="sgrade!=null and sgrade !=''">
+                    and sgrade like "%"#{sgrade}"%"
+                </if>
+                <if test="remark!=null">
+                    and remark like "%"#{remark}"%"
+                </if>
+                and isDelete = 0
+            </where>
+            order by id desc
+        </select>
+
+        <delete id="deleteGrade" parameterType="GradeInfo">
+            update gradeinfo set isDelete = 0 where sgrade = #{sgrade} and remark = #{remark}
+        </delete>
+
+        <update id="updateGradeInfo" parameterType="GradeInfo">
+            update gradeinfo
+            <set>
+                <if test="sgrade!=null and sgrade!=''">
+                    sgrade = #{sgrade},
+                </if>
+                <if test="remark!=null">
+                    remark = #{remark},
+                </if>
+                <if test="isDelete!=null and isDelete!=''">
+                    isDelete = #{isDelete}
+                </if>
+            </set>
+            where id=#{id}
+        </update>
+    </mapper>
