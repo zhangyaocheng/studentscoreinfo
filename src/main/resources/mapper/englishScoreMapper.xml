@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.example.studentscoreinfo.mapper.StudentExamEngScoreMapper">
+
+    <insert id="addEnglishExam" parameterType="Englishscoreinfo">
+        insert into englishscoreinfo (type, listening, singlechoice, clozetest, readcomphrehense, gapfiling, rcfiling,
+        writing, total, examid, studentid, isDelete) values (
+        #{type}, #{listening}, #{singlechoice}, #{clozetest}, #{readcomphrehense}, #{gapfiling}, #{rcfiling},
+        #{writing}, #{total}, #{examid}, #{studentid}, #{isDelete}
+        )
+    </insert>
+
+    <update id="editEnglishExam" parameterType="Englishscoreinfo">
+        update englishscoreinfo
+        <set>
+            <if test="listening!=null and listening!=''">
+                listening = #{listening},
+            </if>
+            <if test="singlechoice!=null and singlechoice!=''">
+                singlechoice = #{singlechoice},
+            </if>
+            <if test="clozetest!=null and clozetest!=''">
+                clozetest = #{clozetest},
+            </if>
+            <if test="readcomphrehense!=null and readcomphrehense!=''">
+                readcomphrehense = #{readcomphrehense},
+            </if>
+            <if test="gapfiling!=null and gapfiling!=''">
+                gapfiling = #{gapfiling},
+            </if>
+            <if test="rcfiling!=null and rcfiling!=''">
+                rcfiling = #{rcfiling},
+            </if>
+            <if test="writing !=null and writing!=''">
+                writing = #{writing},
+            </if>
+            <if test="total!=null and total!=''">
+                total = #{total},
+            </if>
+            <if test="examid!=null">
+                examid = #{examid},
+            </if>
+            <if test="studentid !=null">
+                studentid = #{studentid},
+            </if>
+            <if test="isDelete!=null">
+                isDelete = #{isDelete},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findByUnique" parameterType="Englishscoreinfo" resultType="Englishscoreinfo">
+        select * from englishscoreinfo
+        where examid = #{examid} and studentid=#{studentid} and isDelete = 0
+    </select>
+
+    <select id="findByUniqueWithOutDelete" parameterType="Englishscoreinfo" resultType="Englishscoreinfo">
+        select * from englishscoreinfo
+        where examid = #{examid} and studentid=#{studentid}
+    </select>
+
+    <select id="findByExamIdAndStudentId" parameterType="Integer" resultType="Englishscoreinfo">
+        select * from englishscoreinfo
+        where examid = #{examid} and studentid=#{studentid}
+    </select>
+
+    <select id="findByExamnameAndStudentNum" parameterType="Map" resultType="StudentExamEnglishScore">
+        select * from studentexamenglishscore
+        where examname=#{examname} and studentnumber=#{studentnumber}
+    </select>
+
+    <select id="findAll" resultType="StudentExamEnglishScore">
+        select * from studentexamenglishscore
+    </select>
+
+    <select id="findByParameter" parameterType="Map" resultType="StudentExamEnglishScore">
+        select * from studentexamenglishscore
+        <where>
+            <if test="examname!=null and examname!=''">
+                and examname like "%"#{examname}"%"
+            </if>
+            <if test="type!=null and type!=''">
+                and type like "%"#{type}"%"
+            </if>
+            <if test="name!=null and name!=''">
+                and name like "%"#{name}"%"
+            </if>
+            <if test="studentnumber!=null and  studentnumber">
+                and studentnumber like "%"#{studentnumber}"%"
+            </if>
+            <if test="sgrade!=null and sgrade!=''">
+                and sgrade = #{sgrade}
+            </if>
+            <if test="sclass!=null and sclass!=''">
+                and sclass = #{sclass}
+            </if>
+            <if test="examtime!=null and examtime">
+                and examtime like  "%"#{examtime}"%"
+            </if>
+        </where>
+        order by total desc
+    </select>
+
+    <select id="findScoreBetweenTime" parameterType="Map" resultType="StudentExamEnglishScore">
+        select * from studentexamenglishscore
+        where studentnumber = #{studentnumber} and examtime between #{startTime} and #{endTime}
+    </select>
+
+    <select id="findByGradeAndClassBetweenTime" parameterType="Map" resultType="StudentExamEnglishScore">
+        select * from studentexamenglishscore
+        where sgrade = #{sgrade} and sclass=#{sclass} and examtime between #{startTime} and #{endTime}
+    </select>
+
+    <select id="findExamNameList" parameterType="Map" resultType="String">
+        select distinct examname from studentexamenglishscore
+        where sgrade = #{sgrade} and sclass=#{sclass} and examtime between #{startTime} and #{endTime}
+    </select>
+
+    <select id="findScoreAreaByParameter" parameterType="Map" resultType="ScoreArea">
+        select elt(interval(total,0,10,20,30,40,50,60,70,80,90,100,110,120),
+        "0-10", "11-20", "21-30", "31-40", "41-50", "51-60", "61-70", "71-80", "81-90", "91-100", "101-110","111-120")
+        as scoreArea, count(total) as number from studentexamenglishscore
+        where examname=#{examname} and sgrade=#{sgrade} and sclass=#{sclass} group by scoreArea;
+    </select>
+
+    <select id="findByExam" parameterType="String" resultType="StudentExamEnglishScore">
+        select * from studentexamenglishscore where examname=#{examname}
+    </select>
+
+    </mapper>

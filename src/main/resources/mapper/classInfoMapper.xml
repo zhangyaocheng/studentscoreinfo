@@ -12,7 +12,7 @@
         <update id="updateClassInfo" parameterType="ClassInfo">
             update sclassinfo
             <set>
-                <if test="gradeid!=null and gradeid!=''">
+                <if test="gradeid!=null">
                     gradeid = #{gradeid},
                 </if>
                 <if test="sclass!=null and sclass!=''">
@@ -21,7 +21,7 @@
                 <if test="remark!=null and remark!=''">
                     remark = #{remark},
                 </if>
-                <if test="isDelete!=null and isDelete!=''">
+                <if test="isDelete!=null">
                     isDelete = #{isDelete}
                 </if>
             </set>
@@ -38,10 +38,20 @@
             where s.gradeid = g.id and g.sgrade = #{sgrade}
         </select>
 
-        <select id="findByParameter" resultType="Map">
+        <select id="findByUnique" parameterType="ClassInfo" resultType="ClassInfo">
+            select * from sclassinfo
+            where gradeid=#{gradeid} and sclass=#{sclass} and isDelete=0
+        </select>
+
+        <select id="findByUniqueWithOutDelete" parameterType="ClassInfo" resultType="ClassInfo">
+            select * from sclassinfo
+            where gradeid=#{gradeid} and sclass=#{sclass}
+        </select>
+
+        <select id="findByParameter" resultType="ClassInfo" parameterType="Map">
             select * from sclassinfo
             <where>
-                <if test="gradeid!=null and gradeid!=''">
+                <if test="gradeid!=null">
                     and gradeid = #{gradeid}
                 </if>
                 <if test="sclass!=null and sclass!=''">

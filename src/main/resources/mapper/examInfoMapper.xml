@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.example.studentscoreinfo.mapper.ExamInfoMapper">
+
+    <insert id="addExam" parameterType="ExamInfo">
+        insert into examinfo (examtime, examname, remark, isDelete) values
+        (#{examtime}, #{examname}, #{remark}, #{isDelete})
+    </insert>
+
+    <update id="editExam" parameterType="ExamInfo">
+        update examinfo
+        <set>
+            <if test="examtime!=null and examtime!=''">
+                examtime = #{examtime},
+            </if>
+            <if test="examname!=null and examname!=''">
+                examname = #{examname},
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark = #{remark},
+            </if>
+            <if test="isDelete!=null">
+                isDelete = #{isDelete}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="findByUnique" parameterType="ExamInfo" resultType="ExamInfo">
+        select * from examinfo
+        where examname = #{examname} and isDelete = 0
+    </select>
+
+    <select id="findByUniqueWithOutDelete" parameterType="ExamInfo" resultType="ExamInfo">
+        select * from examinfo
+        where examname = #{examname}
+    </select>
+
+    <select id="findAll" resultType="ExamInfo">
+        select * from examinfo where isDelete = 0
+    </select>
+
+    <select id="findByExamName" parameterType="String" resultType="ExamInfo">
+        select * from examinfo
+        where examname = #{examname} and isDelete = 0
+    </select>
+
+    <select id="findByParameter" parameterType="Map" resultType="ExamInfo">
+        select * from examinfo
+        <where>
+            <if test="examtime!=null and examtime!=''">
+                and examtime like "%"#{examtime}"%"
+            </if>
+            <if test="examname!=null and examname!=''">
+                and examname like "%"#{examname}"%"
+            </if>
+            <if test="remark!=null and remark!=''">
+                and remark like "%"#{remark}"%"
+            </if>
+            <if test="isDelete!=null">
+                and isDelete=#{isDelete}
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    </mapper>

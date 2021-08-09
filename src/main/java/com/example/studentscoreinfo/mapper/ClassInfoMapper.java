@@ -18,9 +18,10 @@ public interface ClassInfoMapper {
 
     int updateClassInfo(ClassInfo classInfo);
 
-    List<ClassInfo> findAll();
+//    List<ClassInfo> findAll();
 
-    List<ClassInfo> findByGrade(GradeInfo gradeInfo); // 从年级表中获取该年级所有的班级
+    ClassInfo findByUnique(ClassInfo classInfo);
+    ClassInfo findByUniqueWithOutDelete(ClassInfo classInfo);
 
     List<ClassInfo> findByParameter(Map map); // 通过参数获取所有信息
 

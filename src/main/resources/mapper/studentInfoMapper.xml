@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.example.studentscoreinfo.mapper.StudentInfoMapper">
+
+    <insert id="addStudent" parameterType="StudentInfo">
+        insert into studentinfo (studentnumber, name, age, sex, time2school, sgrade, sclass,
+        isgraduated, remark, relatepeople, telephone, isDelete) values (
+        #{studentnumber}, #{name}, #{age}, #{sex}, #{time2school}, #{sgrade}, #{sclass},
+        #{isgraduated}, #{remark}, #{relatepeople}, #{telephone}, #{isDelete}
+        )
+    </insert>
+
+    <update id="editStudent" parameterType="StudentInfo">
+        update studentinfo
+        <set>
+            <if test="studentnumber!=null and studentnumber!=''">
+                studentnumber = #{studentnumber},
+            </if>
+            <if test="name!=null and name!=''">
+                name = #{name},
+            </if>
+            <if test="age!=null">
+                age = #{age},
+            </if>
+            <if test="sex!=null and sex!=''">
+                sex = #{sex},
+            </if>
+            <if test="time2school!=null and time2school!=''">
+                time2school = #{time2school},
+            </if>
+            <if test="sgrade!=null and sgrade!=''">
+                sgrade = #{sgrade},
+            </if>
+            <if test="sclass!=null and sclass!=''">
+                sclass = #{sclass},
+            </if>
+            <if test="isgraduated!=null">
+                isgraduated = #{isgraduated},
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark = #{remark},
+            </if>
+            <if test="relatepeople!=null and relatepeople!=''">
+                relatepeople =#{relatepeople},
+            </if>
+            <if test="telephone!=null and telephone!=''">
+                telephone = #{telephone},
+            </if>
+            <if test="isDelete!=null">
+                isDelete = #{isDelete}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="editStudentBat" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            update studentinfo
+            <set>
+                <if test="item.sgrade!=null and item.sgrade!=''">
+                    sgrade = #{item.sgrade},
+                </if>
+                <if test="item.isgraduated!=null">
+                    isgraduated = #{item.isgraduated},
+                </if>
+            </set>
+            where id = #{item.id}
+        </foreach>
+    </update>
+
+    <select id="findByUnique" parameterType="StudentInfo" resultType="StudentInfo">
+        select * from studentinfo
+        where studentnumber = #{studentnumber} and isDelete = 0
+    </select>
+
+    <select id="findByUniqueWithOutDelete" parameterType="StudentInfo" resultType="StudentInfo">
+        select * from studentinfo
+        where studentnumber = #{studentnumber}
+    </select>
+
+    <select id="findByStudentNumber" parameterType="String" resultType="StudentInfo">
+        select * from studentinfo
+        where studentnumber = #{studentnumber}
+    </select>
+
+    <select id="findAll" resultType="StudentInfo">
+        select * from studentinfo where isDelete = 0 and isgraduated=0
+    </select>
+
+    <select id="findByParameter" parameterType="Map" resultType="StudentInfo">
+        select * from studentinfo
+        <where>
+            <if test="studentnumber!=null and studentnumber!=''">
+                and studentnumber like "%"#{studentnumber}"%"
+            </if>
+            <if test="name!=null and name!=''">
+                and name like "%"#{name}"%"
+            </if>
+            <if test="age!=null">
+                and age=#{age}
+            </if>
+            <if test="sex!=null and sex!=''">
+                and sex=#{sex}
+            </if>
+            <if test="time2school!=null and time2school!=''">
+                and time2school like  "%"#{time2school}"%"
+            </if>
+            <if test="sgrade!=null and sgrade">
+                and sgrade=#{sgrade}
+            </if>
+            <if test="sclass!=null and sclass!=''">
+                and sclass=#{sclass}
+            </if>
+            <if test="isgraduated!=null">
+                and isgraduated=#{isgraduated}
+            </if>
+            <if test="remark!=null and remark!=''">
+                and remark like "%"#{remark}"%"
+            </if>
+            <if test="relatepeople!=null and relatepeople!=''">
+                and relatepeople like "%"#{relatepeople}"%"
+            </if>
+            <if test="telephone!=null and telephone!=''">
+                and telephone like "%"#{telephone}"%"
+            </if>
+            <if test="isDelete!=null">
+                and isDelete=#{isDelete}
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    </mapper>

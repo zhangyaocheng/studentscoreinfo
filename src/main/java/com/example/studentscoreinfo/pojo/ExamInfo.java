@@ -10,7 +10,7 @@ public class ExamInfo {
 
     private Integer id;
     private String examtime; // 考试时间
-    private String examname; // 考试名称
+    private String examname; // 考试名称 唯一索引
     private String remark; // 备注
     private Integer isDelete;
 

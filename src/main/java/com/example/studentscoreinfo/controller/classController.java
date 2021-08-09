@@ -3,6 +3,8 @@ package com.example.studentscoreinfo.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.example.studentscoreinfo.pojo.ClassInfo;
 import com.example.studentscoreinfo.pojo.Msg;
+import com.example.studentscoreinfo.service.ClassService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,14 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class classController {
 
+    @Autowired
+    ClassService classService;
+
     /**
      * 新增班级信息 和年级信息关联
      * @param classInfo
      * @return
      */
-    @PostMapping("/addClass")
+    @PostMapping("/add")
     public Msg addClassInfo(@RequestBody ClassInfo classInfo){
-        return null;
+        return classService.addClassInfo(classInfo);
     }
 
     /**
@@ -31,19 +36,20 @@ public class classController {
      * @param classInfo
      * @return
      */
-    @PostMapping("/deleteClassInfo")
+    @PostMapping("/delete")
     public Msg deleteClassInfo(@RequestBody ClassInfo classInfo){
-        return null;
+        return classService.deleteClassInfo(classInfo);
     }
 
     /**
      * 修改班级信息
+     * 一般 修改 isDelete 或者 remark信息
      * @param classInfo
      * @return
      */
-    @PostMapping("/updateClassInfo")
+    @PostMapping("/update")
     public Msg updateClassInfo(@RequestBody ClassInfo classInfo){
-        return null;
+        return classService.updateClassInfo(classInfo);
     }
 
     /**
@@ -53,10 +59,7 @@ public class classController {
      */
     @PostMapping("/findByParameters")
     public Msg findClassInfoByParameters(@RequestBody JSONObject json){
-        return null;
+        return classService.findByParameter(json);
     }
-
-
-
 
 }

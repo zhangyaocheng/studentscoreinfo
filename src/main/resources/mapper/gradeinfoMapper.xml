@@ -46,7 +46,7 @@
                 <if test="remark!=null">
                     remark = #{remark},
                 </if>
-                <if test="isDelete!=null and isDelete!=''">
+                <if test="isDelete!=null">
                     isDelete = #{isDelete}
                 </if>
             </set>
