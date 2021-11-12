@@ -58,11 +58,17 @@
             <if test="remark!=null and remark!=''">
                 and remark like "%"#{remark}"%"
             </if>
-            <if test="isDelete!=null">
-                and isDelete=#{isDelete}
-            </if>
+            and isDelete=0
         </where>
         order by id desc
+    </select>
+
+    <select id="findById" resultType="ExamInfo" parameterType="String">
+        select * from examinfo where id=#{id} and isDelete=0
+    </select>
+
+    <select id="findByNameFuzy" parameterType="String" resultType="ExamInfo">
+        select * from examinfo where examname like "%"#{examname}"%"
     </select>
 
     </mapper>

@@ -7,6 +7,7 @@ import com.example.studentscoreinfo.pojo.Msg;
 import com.example.studentscoreinfo.util.PageUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sun.org.apache.regexp.internal.RE;
 import lombok.extern.slf4j.Slf4j;
 import org.omg.CORBA.MARSHAL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -145,7 +146,7 @@ public class ExamService {
 
             result.setData(PageUtils.getPageResult(pageInfo));
             result.setOk(true);
-            result.setErrMsg("200");
+            result.setStatus("200");
 
         }catch (Exception e){
             result.setExceptionMsg("获取所有考试信息异常");
@@ -189,12 +190,65 @@ public class ExamService {
             PageInfo<ExamInfo> pageInfo = new PageInfo<>(list);
 
             result.setData(PageUtils.getPageResult(pageInfo));
-            result.setStatus("500");
+            result.setStatus("200");
             result.setOk(true);
 
         }catch (Exception e){
             result.setExceptionMsg("通过参数获取考试信息异常");
             log.error("通过参数获取考试信息异常", e);
+        }
+
+        return result;
+    }
+
+    /**
+     * 通过ID获取考试信息
+     * @param id
+     * @return
+     */
+    public Msg findById(Integer id){
+        Msg result = new Msg();
+        result.setOk(false);
+        result.setStatus("500");
+        result.setData(null);
+
+        try {
+
+            ExamInfo examInfo = examInfoMapper.findById(id.toString());
+            if (examInfo==null){
+                result.setErrMsg("ID:"+id+" 对应的考试信息不存在");
+                return result;
+            }
+            result.setData(examInfo);
+            result.setStatus("200");
+            result.setOk(true);
+
+        }catch (Exception e){
+            result.setExceptionMsg("通过ID获取考试信息异常");
+            log.error("通过ID获取考试信息异常", e);
+        }
+        return result;
+    }
+
+    /**
+     * 通过模糊名称获取所有考试信息
+     * @param name
+     * @return
+     */
+    public Msg findByFuzyName(String name){
+        Msg result = new Msg();
+        result.setStatus("500");
+        result.setOk(false);
+        result.setData(null);
+
+        try {
+            List<ExamInfo> list = examInfoMapper.findByNameFuzy(name);
+            result.setData(list);
+            result.setOk(true);
+            result.setStatus("200");
+        }catch (Exception e){
+            result.setExceptionMsg("通过模糊名称获取考试姓名异常");
+            log.error("通过模糊名称获取考试姓名异常", e);
         }
 
         return result;

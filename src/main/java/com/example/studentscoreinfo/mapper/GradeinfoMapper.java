@@ -16,6 +16,7 @@ public interface GradeinfoMapper {
     GradeInfo findGradeInfoByGrade(GradeInfo gradeInfo);
     GradeInfo findGradeInfoById(GradeInfo gradeInfo);
     int updateGradeInfo(GradeInfo gradeInfo);
+    GradeInfo findById(String id);
 
     List<GradeInfo> listAllGrades(); // 获取所有的年级信息
 

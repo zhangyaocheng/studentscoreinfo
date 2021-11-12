@@ -29,6 +29,7 @@ public interface StudentExamEngScoreMapper {
     List<String> findExamNameList(Map map);
     List<ScoreArea> findScoreAreaByParameter(Map map);
     List<StudentExamEnglishScore> findByExam(String examname);
+    StudentExamEnglishScore findById(String id);
 
     List<StudentExamEnglishScore> findAll();
     List<StudentExamEnglishScore> findByParameter(Map map);

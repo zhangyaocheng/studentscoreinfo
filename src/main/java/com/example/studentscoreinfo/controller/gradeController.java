@@ -30,6 +30,16 @@ public class gradeController {
     }
 
     /**
+     * 通过ID获取数据
+     * @param id
+     * @return
+     */
+    @GetMapping("/findById")
+    public Msg findById(@RequestParam(value = "id", required = true) String id){
+        return gradeService.findById(id);
+    }
+
+    /**
      * 删除年级数据
      * @param gradeInfo
      * @return

@@ -4,16 +4,16 @@
     <mapper namespace="com.example.studentscoreinfo.mapper.ClassInfoMapper">
 
         <insert id="addClassInfo" parameterType="ClassInfo">
-            insert into sclassinfo (gradeid, sclass, remark, isDelete) values (
-            #{gradeid}, #{sclass}, #{remark}, #{isDelete}
+            insert into sclassinfo (sgrade, sclass, remark, isDelete) values (
+            #{sgrade}, #{sclass}, #{remark}, #{isDelete}
             )
         </insert>
 
         <update id="updateClassInfo" parameterType="ClassInfo">
             update sclassinfo
             <set>
-                <if test="gradeid!=null">
-                    gradeid = #{gradeid},
+                <if test="sgrade!=null and sgrade!=''">
+                    sgrade = #{sgrade},
                 </if>
                 <if test="sclass!=null and sclass!=''">
                     sclass = #{sclass},
@@ -33,26 +33,26 @@
         </select>
 
         <select id="findByGrade" resultType="ClassInfo" parameterType="GradeInfo">
-            select s.id, s.gradeid, s.sclass, s.remark, s.isDelete
-            from sclassinfo as s, gradeinfo as g
-            where s.gradeid = g.id and g.sgrade = #{sgrade}
+            select s.id, s.sgrade, s.sclass, s.remark, s.isDelete
+            from sclassinfo
+            where g.sgrade = #{sgrade}
         </select>
 
         <select id="findByUnique" parameterType="ClassInfo" resultType="ClassInfo">
             select * from sclassinfo
-            where gradeid=#{gradeid} and sclass=#{sclass} and isDelete=0
+            where sgrade=#{sgrade} and sclass=#{sclass} and isDelete=0
         </select>
 
         <select id="findByUniqueWithOutDelete" parameterType="ClassInfo" resultType="ClassInfo">
             select * from sclassinfo
-            where gradeid=#{gradeid} and sclass=#{sclass}
+            where sgrade=#{sgrade} and sclass=#{sclass}
         </select>
 
         <select id="findByParameter" resultType="ClassInfo" parameterType="Map">
             select * from sclassinfo
             <where>
-                <if test="gradeid!=null">
-                    and gradeid = #{gradeid}
+                <if test="sgrade!=null and sgrade!=''">
+                    and sgrade = #{sgrade}
                 </if>
                 <if test="sclass!=null and sclass!=''">
                     and sclass = #{sclass}
@@ -64,5 +64,13 @@
             </where>
             order by id desc
         </select>
+
+    <select id="findClassById" parameterType="String" resultType="ClassInfo">
+        select * from sclassinfo where id=#{id}
+    </select>
+
+    <select id="listAll" resultType="ClassInfo">
+        select * from sclassinfo where isDelete=0
+    </select>
 
     </mapper>

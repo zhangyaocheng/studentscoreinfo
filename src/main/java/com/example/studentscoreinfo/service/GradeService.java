@@ -252,4 +252,35 @@ public class GradeService {
         return result;
     }
 
+    /**
+     * 通过id获取对象
+     * @param id
+     * @return
+     */
+    public Msg findById(String id){
+
+        Msg result = new Msg();
+        result.setData(null);
+        result.setOk(false);
+        result.setStatus("500");
+
+        try {
+
+            GradeInfo gradeInfo = gradeinfoMapper.findById(id);
+            if (gradeInfo==null){
+                result.setErrMsg("通过ID获取年级信息失败");
+                return result;
+            }
+            result.setData(gradeInfo);
+            result.setStatus("200");
+            result.setOk(true);
+
+        }catch (Exception e){
+            result.setExceptionMsg("通过ID获取对象异常");
+            log.error("通过ID获取对象异常", e);
+        }
+
+        return result;
+    }
+
 }

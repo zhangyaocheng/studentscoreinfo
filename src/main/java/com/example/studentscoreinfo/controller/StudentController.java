@@ -87,4 +87,24 @@ public class StudentController {
         return studentService.findByParameter(json);
     }
 
+    /**
+     * 通过ID获取学生信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/findById")
+    public Msg findById(@RequestParam(value = "id", required = true) Integer id){
+        return studentService.findById(id);
+    }
+
+    /**
+     * 通过姓名.班级，年级信息获取学生信息 不分页
+     * @param json
+     * @return
+     */
+    @PostMapping("/findByParamsWOP")
+    public Msg findByParameterWOP(@RequestBody JSONObject json){
+        return studentService.findByParameterWOP(json);
+    }
+
 }

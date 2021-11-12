@@ -22,7 +22,9 @@ public interface ClassInfoMapper {
 
     ClassInfo findByUnique(ClassInfo classInfo);
     ClassInfo findByUniqueWithOutDelete(ClassInfo classInfo);
+    ClassInfo findClassById(String id);
 
     List<ClassInfo> findByParameter(Map map); // 通过参数获取所有信息
+    List<ClassInfo> listAll();
 
 }

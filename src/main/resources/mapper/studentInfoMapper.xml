@@ -106,7 +106,7 @@
             <if test="time2school!=null and time2school!=''">
                 and time2school like  "%"#{time2school}"%"
             </if>
-            <if test="sgrade!=null and sgrade">
+            <if test="sgrade!=null and sgrade!=''">
                 and sgrade=#{sgrade}
             </if>
             <if test="sclass!=null and sclass!=''">
@@ -124,9 +124,28 @@
             <if test="telephone!=null and telephone!=''">
                 and telephone like "%"#{telephone}"%"
             </if>
-            <if test="isDelete!=null">
-                and isDelete=#{isDelete}
+            and isDelete=0
+        </where>
+        order by id desc
+    </select>
+
+    <select id="findById" parameterType="String" resultType="StudentInfo">
+        select * from studentinfo where id=#{id} and isDelete=0
+    </select>
+
+    <select id="findByParameterWOP" parameterType="Map" resultType="StudentInfo">
+        select * from studentinfo
+        <where>
+            <if test="name!=null">
+                and name like "%"#{name}"%"
             </if>
+            <if test="sgrade!=null and sgrade!=''">
+                and sgrade=#{sgrade}
+            </if>
+            <if test="sclass!=null and sclass!=''">
+                and sclass=#{sclass}
+            </if>
+            and isDelete=0
         </where>
         order by id desc
     </select>

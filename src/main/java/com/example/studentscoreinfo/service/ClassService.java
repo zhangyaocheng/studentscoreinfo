@@ -4,6 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.studentscoreinfo.mapper.ClassInfoMapper;
 import com.example.studentscoreinfo.pojo.ClassInfo;
 import com.example.studentscoreinfo.pojo.Msg;
+import com.example.studentscoreinfo.util.PageUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -137,19 +140,113 @@ public class ClassService {
 
         try {
 
+            Integer pageNum = json.getInteger("pageNum");
+            Integer size = json.getInteger("size");
+            if (pageNum==null){pageNum = 1;}
+            if (size==null){size=10;}
+
            Map<String, String> map = new HashMap<>();
-           map.put("gradeid", json.getString("gradeid"));
+           map.put("sgrade", json.getString("sgrade"));
            map.put("sclass", json.getString("sclass"));
            map.put("remark", json.getString("remark"));
 
+           PageHelper.startPage(pageNum,size);
+
            List<ClassInfo> lists = classInfoMapper.findByParameter(map);
-           result.setData(lists);
+           PageInfo<ClassInfo> pageInfo = new PageInfo<>(lists);
+           result.setData(PageUtils.getPageResult(pageInfo));
            result.setOk(true);
            result.setStatus("200");
 
         }catch (Exception e){
             result.setExceptionMsg("通过参数查询班级信息异常");
             log.error("通过参数查询班级信息异常", e);
+        }
+
+        return result;
+    }
+
+    /**
+     * 通过id获取班级信息
+     * @param id
+     * @return
+     */
+    public Msg findClassById(String id){
+        Msg result = new Msg();
+        result.setOk(false);
+        result.setStatus("500");
+        result.setData(null);
+
+        try {
+
+            ClassInfo classInfo = classInfoMapper.findClassById(id);
+            if (classInfo==null || classInfo.getIsDelete()==1){
+                result.setErrMsg("ID:"+id+" 对应的班级信息不存在");
+                return result;
+            }
+            result.setData(classInfo);
+            result.setStatus("200");
+            result.setOk(true);
+
+        }catch (Exception e){
+            result.setExceptionMsg("通过ID获取班级信息异常");
+            log.error("通过ID获取班级信息异常", e);
+
+        }
+
+        return result;
+    }
+
+    /**
+     * 返回所有班级信息并分页
+     * @param pageNum
+     * @param size
+     * @return
+     */
+    public Msg listAll(Integer pageNum, Integer size){
+        Msg result = new Msg();
+        result.setOk(false);
+        result.setStatus("500");
+        result.setData(null);
+
+        try {
+
+            PageHelper.startPage(pageNum,size);
+            List<ClassInfo> list = classInfoMapper.listAll();
+            PageInfo<ClassInfo> pageInfo = new PageInfo<>(list);
+            result.setData(PageUtils.getPageResult(pageInfo));
+            result.setStatus("200");
+            result.setOk(true);
+
+        }catch (Exception e){
+            result.setExceptionMsg("获取所有班级信息异常");
+            log.error("获取所有班级信息异常", e);
+        }
+
+        return result;
+    }
+
+    /**
+     * 获取所有年级信息不分页
+     * @return
+     */
+    public Msg listAllWOP(){
+        Msg result = new Msg();
+        result.setStatus("500");
+        result.setOk(false);
+        result.setData(null);
+
+        try {
+
+            List<ClassInfo> list = classInfoMapper.listAll();
+            result.setData(list);
+            result.setOk(true);
+            result.setStatus("200");
+
+        }catch (Exception e){
+
+            result.setExceptionMsg("获取所有班级信息异常");
+            log.error("获取所有班级信息异常", e);
         }
 
         return result;

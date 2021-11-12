@@ -22,7 +22,8 @@ public interface StudentInfoMapper {
     StudentInfo findByUnique(StudentInfo studentInfo); // 查找唯一对象
     StudentInfo findByStudentNumber(String studentnumber);
     StudentInfo findByUniqueWithOutDelete(StudentInfo studentInfo); // 查找唯一对象 不排除已经删除的对象
-
+    StudentInfo findById(String id);
+    List<StudentInfo> findByParameterWOP(Map map);
 
     List<StudentInfo> findAll();
     List<StudentInfo> findByParameter(Map map);

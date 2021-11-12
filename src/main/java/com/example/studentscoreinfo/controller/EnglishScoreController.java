@@ -71,6 +71,17 @@ public class EnglishScoreController {
     }
 
     /**
+     * 通过ID获取学生考试成绩
+     * @param id
+     * @return
+     */
+    @GetMapping("/findById")
+    public Msg findById(@RequestParam(value = "id", required = true) Integer id){
+        return service.findById(id);
+    }
+
+
+    /**
      * 获取学生在一定时间范围内 成绩和总分列表
      * @param json
      * @return

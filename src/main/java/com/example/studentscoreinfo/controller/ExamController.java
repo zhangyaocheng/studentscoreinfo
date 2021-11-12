@@ -68,4 +68,26 @@ public class ExamController {
     public Msg findByParameter(@RequestBody JSONObject json){
         return examService.findByParameter(json);
     }
+
+    /**
+     * 通过ID获取考试信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/findById")
+    public Msg findById(@RequestParam(value = "id", required = true) Integer id){
+        return examService.findById(id);
+    }
+
+    // TODO: 通过模糊名称 获取完整考试名称
+
+    /**
+     * 通过名称获取考试信息 模糊查询
+     * @param name
+     * @return
+     */
+    @GetMapping("/findByName")
+    public Msg findByName(@RequestParam(value = "name", required = true)String name){
+        return examService.findByFuzyName(name);
+    }
 }

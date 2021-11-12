@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 public class StudentExamEnglishScore {
 
+    private int id;
     private String type; // 考试类型 这里是英语
     private String listening; // 听力分数 这里用字符串表示
     private String singlechoice; // 单选

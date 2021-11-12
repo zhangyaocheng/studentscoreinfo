@@ -129,4 +129,8 @@
         select * from studentexamenglishscore where examname=#{examname}
     </select>
 
+    <select id="findById" resultType="StudentExamEnglishScore" parameterType="String">
+        select * from studentexamenglishscore where id=#{id}
+    </select>
+
     </mapper>

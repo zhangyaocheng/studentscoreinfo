@@ -248,7 +248,7 @@ public class StudentService {
             map.put("age", json.getInteger("age"));
             map.put("sex", json.getString("sex"));
             map.put("time2school", json.getString("time2school"));
-            map.put("sgrade", json.get("sgrade"));
+            map.put("sgrade", json.getString("sgrade"));
             map.put("sclass", json.getString("sclass"));
             map.put("isgraduated", json.getInteger("isgraduated"));
             map.put("remark", json.getString("remark"));
@@ -260,6 +260,74 @@ public class StudentService {
             List<StudentInfo> lists = studentInfoMapper.findByParameter(map);
             PageInfo<StudentInfo> pageInfo = new PageInfo<>(lists);
             result.setData(PageUtils.getPageResult(pageInfo));
+            result.setOk(true);
+            result.setStatus("200");
+
+        }catch (Exception e){
+            result.setExceptionMsg("通过参数获取学生信息异常");
+            log.error("通过参数获取学生信息异常", e);
+        }
+
+        return result;
+    }
+
+    /**
+     * 通过ID获取学生信息
+     * @param id
+     * @return
+     */
+    public Msg findById(Integer id){
+        Msg result = new Msg();
+        result.setStatus("500");
+        result.setOk(true);
+        result.setData(null);
+
+        try {
+
+            StudentInfo studentInfo = studentInfoMapper.findById(id.toString());
+            if (studentInfo==null){
+                result.setErrMsg("ID:"+id+" 对应的学生信息不存在数据库中");
+                return result;
+            }
+            result.setData(studentInfo);
+            result.setOk(true);
+            result.setStatus("200");
+
+        }catch (Exception e){
+            result.setExceptionMsg("通过ID获取学生信息异常");
+            log.error("通过ID获取学生信息异常", e);
+        }
+
+        return result;
+    }
+
+    /**
+     * 通过年级，班级，姓名 模糊查询 结果不分页
+     * @param json
+     * @return
+     */
+    public Msg findByParameterWOP(JSONObject json){
+        Msg result = new Msg();
+        result.setStatus("500");
+        result.setOk(false);
+        result.setData(null);
+
+        try {
+
+
+            Map map = new HashMap();
+
+            String name = json.getString("name");
+            if (name == null){
+                name = "";
+            }
+            map.put("name", name);
+
+            map.put("sgrade", json.getString("sgrade"));
+            map.put("sclass", json.getString("sclass"));
+
+            List<StudentInfo> lists = studentInfoMapper.findByParameterWOP(map);
+            result.setData(lists);
             result.setOk(true);
             result.setStatus("200");
 

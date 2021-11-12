@@ -12,6 +12,7 @@ import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.omg.CORBA.MARSHAL;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.Style;
@@ -30,6 +31,18 @@ public class EnglishScoreService {
     private ExamInfoMapper examInfoMapper;
     @Autowired
     private StudentInfoMapper studentInfoMapper;
+
+    public ResourceBundle bundle = ResourceBundle.getBundle("application", new Locale("CN"));
+    private Integer englishLis = Integer.parseInt(bundle.getString("englishscore.lis"));
+    private Integer englishSin = Integer.parseInt(bundle.getString("englishscore.sin"));
+    private Integer englishClo = Integer.parseInt(bundle.getString("englishscore.clo"));
+    private Integer englishRC = Integer.parseInt(bundle.getString("englishscore.rc"));
+    private Integer englishGapf = Integer.parseInt(bundle.getString("englishscore.gapf"));
+    private Integer englishRcf = Integer.parseInt(bundle.getString("englishscore.rcf"));
+    private Integer englishWri = Integer.parseInt(bundle.getString("englishscore.wri"));
+    private Integer englishTotal = Integer.parseInt(bundle.getString("englishscore.total"));
+
+
 
     /**
      * 转换 将前端传递过来的学生成绩信息 转换为单纯的考试成绩信息
@@ -293,6 +306,36 @@ public class EnglishScoreService {
     }
 
     /**
+     * 通过ID获取学生考试成绩
+     * @param id
+     * @return
+     */
+    public Msg findById(Integer id){
+        Msg result = new Msg();
+        result.setStatus("500");
+        result.setOk(false);
+        result.setData(null);
+
+        try {
+
+            StudentExamEnglishScore studentExamEnglishScore = mapper.findById(id.toString());
+            if (studentExamEnglishScore==null){
+                result.setErrMsg("通过ID:"+id+" 对应的学生成绩不在数据库中");
+                return result;
+            }
+            result.setData(studentExamEnglishScore);
+            result.setOk(true);
+            result.setStatus("200");
+
+        }catch (Exception e){
+            result.setExceptionMsg("通过ID获取学生考试成绩异常");
+            log.error("通过ID获取学生考试成绩异常", e);
+        }
+
+        return result;
+    }
+
+    /**
      * 获取一个学生在指定时间范围内考试成绩分布
      * @param json
      * @return
@@ -456,14 +499,14 @@ public class EnglishScoreService {
             StudentExamEnglishScore score = mapper.findByExamnameAndStudentNum(map);
 
             List<String> percentageList = new ArrayList<>();
-            percentageList.add(Float.parseFloat(score.getListening()) / 100 + "");
-            percentageList.add(Float.parseFloat(score.getSinglechoice()) / 100 + "");
-            percentageList.add(Float.parseFloat(score.getClozetest())/100 + "");
-            percentageList.add(Float.parseFloat(score.getReadcomphrehense())/100 + "");
-            percentageList.add(Float.parseFloat(score.getGapfiling())/100 + "");
-            percentageList.add(Float.parseFloat(score.getRcfiling())/100 + "");
-            percentageList.add(Float.parseFloat(score.getWriting())/100+"");
-            percentageList.add(Float.parseFloat(score.getTotal())/100+"");
+            percentageList.add(Float.parseFloat(score.getListening()) / englishLis + "");
+            percentageList.add(Float.parseFloat(score.getSinglechoice()) / englishSin + "");
+            percentageList.add(Float.parseFloat(score.getClozetest())/englishClo + "");
+            percentageList.add(Float.parseFloat(score.getReadcomphrehense())/englishRC + "");
+            percentageList.add(Float.parseFloat(score.getGapfiling())/englishGapf + "");
+            percentageList.add(Float.parseFloat(score.getRcfiling())/englishRcf + "");
+            percentageList.add(Float.parseFloat(score.getWriting())/englishWri +"");
+            percentageList.add(Float.parseFloat(score.getTotal())/englishTotal+"");
 
             result.setData(percentageList);
             result.setOk(true);
@@ -534,28 +577,28 @@ public class EnglishScoreService {
                     }
                 }
                 examname.add(examnameInfo);
-                String percentageResultListening = ListUtil.getPercentageAndAverage(lisningList_tmp, 100);
+                String percentageResultListening = ListUtil.getPercentageAndAverage(lisningList_tmp, englishLis);
                 lisningList.add(percentageResultListening);
 
-                String percentageResultSingleChoice = ListUtil.getPercentageAndAverage(singlechoiceList_tmp, 100);
+                String percentageResultSingleChoice = ListUtil.getPercentageAndAverage(singlechoiceList_tmp, englishSin);
                 singlechoiceList.add(percentageResultSingleChoice);
 
-                String percentageResultCloze = ListUtil.getPercentageAndAverage(clozetestList_tmp, 100);
+                String percentageResultCloze = ListUtil.getPercentageAndAverage(clozetestList_tmp, englishClo);
                 clozetestList.add(percentageResultCloze);
 
-                String percentageResultReadcomlist = ListUtil.getPercentageAndAverage(readcomphrehenseList_tmp, 100);
+                String percentageResultReadcomlist = ListUtil.getPercentageAndAverage(readcomphrehenseList_tmp, englishRC);
                 readcomphrehenseList.add(percentageResultReadcomlist);
 
-                String percentageResultGap = ListUtil.getPercentageAndAverage(gapfilingList_tmp, 100);
+                String percentageResultGap = ListUtil.getPercentageAndAverage(gapfilingList_tmp, englishGapf);
                 gapfilingList.add(percentageResultGap);
 
-                String percentageResultRCF = ListUtil.getPercentageAndAverage(rcfilingList_tmp, 100);
+                String percentageResultRCF = ListUtil.getPercentageAndAverage(rcfilingList_tmp, englishRcf);
                 rcfilingList.add(percentageResultRCF);
 
-                String percentageResultTotal = ListUtil.getPercentageAndAverage(total_tmp, 100);
+                String percentageResultTotal = ListUtil.getPercentageAndAverage(total_tmp, englishTotal);
                 total.add(percentageResultTotal);
 
-                String percentageResultWrite = ListUtil.getPercentageAndAverage(writing_tmp, 100);
+                String percentageResultWrite = ListUtil.getPercentageAndAverage(writing_tmp, englishWri);
                 writing.add(percentageResultWrite);
 
             }
@@ -685,28 +728,28 @@ public class EnglishScoreService {
                 }
 
                 examname.add(exam);
-                String percentageResultListening = ListUtil.getPercentageAndAverage(lisningList_tmp, 100);
+                String percentageResultListening = ListUtil.getPercentageAndAverage(lisningList_tmp, englishLis);
                 lisningList.add(percentageResultListening);
 
-                String percentageResultSingleChoice = ListUtil.getPercentageAndAverage(singlechoiceList_tmp, 100);
+                String percentageResultSingleChoice = ListUtil.getPercentageAndAverage(singlechoiceList_tmp, englishSin);
                 singlechoiceList.add(percentageResultSingleChoice);
 
-                String percentageResultCloze = ListUtil.getPercentageAndAverage(clozetestList_tmp, 100);
+                String percentageResultCloze = ListUtil.getPercentageAndAverage(clozetestList_tmp, englishClo);
                 clozetestList.add(percentageResultCloze);
 
-                String percentageResultReadcomlist = ListUtil.getPercentageAndAverage(readcomphrehenseList_tmp, 100);
+                String percentageResultReadcomlist = ListUtil.getPercentageAndAverage(readcomphrehenseList_tmp, englishRC);
                 readcomphrehenseList.add(percentageResultReadcomlist);
 
-                String percentageResultGap = ListUtil.getPercentageAndAverage(gapfilingList_tmp, 100);
+                String percentageResultGap = ListUtil.getPercentageAndAverage(gapfilingList_tmp, englishGapf);
                 gapfilingList.add(percentageResultGap);
 
-                String percentageResultRCF = ListUtil.getPercentageAndAverage(rcfilingList_tmp, 100);
+                String percentageResultRCF = ListUtil.getPercentageAndAverage(rcfilingList_tmp, englishRcf);
                 rcfilingList.add(percentageResultRCF);
 
-                String percentageResultTotal = ListUtil.getPercentageAndAverage(total_tmp, 100);
+                String percentageResultTotal = ListUtil.getPercentageAndAverage(total_tmp, englishTotal);
                 total.add(percentageResultTotal);
 
-                String percentageResultWrite = ListUtil.getPercentageAndAverage(writing_tmp, 100);
+                String percentageResultWrite = ListUtil.getPercentageAndAverage(writing_tmp, englishWri);
                 writing.add(percentageResultWrite);
 
             }
